@@ -48,8 +48,7 @@ public class TropoTelephonyClientTest {
 
         @Override
         public synchronized void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-            // do nothing
-            TropoTelephonyClientTest.log.info("handle called.");
+            log.info("handle called.");
             response.setStatus(200);
             final Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
