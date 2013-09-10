@@ -6,4 +6,6 @@ public interface TelephonyClient {
 
     public void send(TelephonyMessage message) throws Exception;
 
+    public String render(TelephonyMessage message) throws Exception;
+
 }

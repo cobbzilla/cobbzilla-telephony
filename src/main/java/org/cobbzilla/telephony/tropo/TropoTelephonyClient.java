@@ -3,9 +3,6 @@ package org.cobbzilla.telephony.tropo;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
-import org.cobbzilla.telephony.TelephonyClientBase;
-import org.cobbzilla.telephony.TelephonyClientConfiguration;
-import org.cobbzilla.telephony.TelephonyMessage;
 import org.cobbzilla.util.http.HttpStatusCodes;
 import org.cobbzilla.util.mustache.LocaleAwareMustacheFactory;
 
@@ -14,6 +11,9 @@ import java.io.UnsupportedEncodingException;
 
 import static java.net.URLEncoder.encode;
 import static org.cobbzilla.util.string.StringUtil.UTF8;
+import org.cobbzilla.telephony.TelephonyClientConfiguration;
+import org.cobbzilla.telephony.TelephonyClientBase;
+import org.cobbzilla.telephony.TelephonyMessage;
 
 public class TropoTelephonyClient extends TelephonyClientBase {
 
@@ -41,10 +41,14 @@ public class TropoTelephonyClient extends TelephonyClientBase {
     }
 
     @Override
-    public void send(TelephonyMessage message) throws Exception {
-
+    public String render(TelephonyMessage message) throws Exception {
         final LocaleAwareMustacheFactory mustache = LocaleAwareMustacheFactory.getFactory(fileRoot, message.getLocale());
-        final String body = mustache.render(message.getTemplate()+labelSuffix, message.getScope());
+        return mustache.render(message.getTemplate()+labelSuffix, message.getScope());
+    }
+
+    @Override
+    public void send(TelephonyMessage message) throws Exception {
+        final String body = render(message);
 
         final StringBuilder uri = new StringBuilder(configuration.getEndpoint()).append("?action=create");
         addParam(uri, PARAM_TOKEN, token);
@@ -62,5 +66,5 @@ public class TropoTelephonyClient extends TelephonyClientBase {
     private void addParam(StringBuilder uri, String param, String value) throws UnsupportedEncodingException {
         uri.append("&").append(param).append("=").append(encode(value, UTF8));
     }
-
 }
+
