@@ -66,7 +66,6 @@ public class TropoTelephonyClientTest {
         }
     }
 
-
     @Before public void writeTempTemplate() throws Exception {
         templateBaseDir = FileUtil.createTempDir(getClass().getSimpleName());
         final String resourcePath = TEST_TEMPLATE_MUSTACHE;
